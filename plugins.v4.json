@@ -84,6 +84,20 @@
         "自动化"
       ],
       "minVersion": "4.14.0"
+    },
+    {
+      "id": "napcat-plugin-tsai",
+      "name": "AI 绘画",
+      "version": "1.0.0",
+      "description": "AI绘画插件",
+      "author": "Tavre",
+      "homepage": "https://github.com/Tavre/napcat-plugin-tsai",
+      "downloadUrl": "https://github.com/Tavre/napcat-plugin-tsai/releases/download/Latest/napcat-plugin-tsai.zip",
+      "tags": [
+        "工具",
+        "AI"
+      ],
+      "minVersion": "4.14.0"
     }
   ]
 }
