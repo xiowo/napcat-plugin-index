@@ -27,10 +27,14 @@ jobs:
         run: git fetch origin main
 
       - name: Run Security Scan
+        id: scan
         run: node scripts/security-scan.mjs
         env:
           # 如果需要 GitHub Token 下载资源可以在这里传，目前脚本使用公开链接不需要
           CI: true
+          AI_API_BASE: ${{ secrets.AI_API_BASE }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
 
       - name: Comment PR
         uses: actions/github-script@v7
@@ -54,3 +58,9 @@ jobs:
             } catch (e) {
               console.log('No report found or failed to comment', e);
             }
+
+      - name: Auto Merge
+        if: steps.scan.outputs.has_high_risks == 'false' && github.event_name == 'pull_request'
+        run: gh pr merge --auto --merge "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

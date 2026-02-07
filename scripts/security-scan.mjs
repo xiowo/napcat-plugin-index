@@ -167,6 +167,69 @@ async function getChangedPlugins() {
     }
 }
 
+async function checkWithAI(pluginName, risks) {
+    if (!process.env.AI_API_KEY) return null;
+
+    // Group risks
+    const groups = {};
+    risks.forEach(r => {
+        const key = `${r.type} in ${r.file}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r.code);
+    });
+
+    let description = '';
+    for (const [key, codes] of Object.entries(groups)) {
+        description += `- **${key}** (${codes.length} occurrences)\n`;
+        // Show first 3 examples
+        codes.slice(0, 3).forEach(c => description += `  Code: \`${c}\`\n`);
+    }
+
+    const prompt = `你是一位代码安全专家，正在审查一个名为 "${pluginName}" 的 NapCat (QQ 机器人) 插件。
+静态分析工具发现了以下潜在风险。
+请对它们进行分析。请注意：
+1. 压缩后的 HTML/JS 代码是常见的（例如 React/Vue 构建产物），通常是安全的。
+2. 文件系统写入通常用于保存配置或数据，是插件的正常功能。
+3. 网络请求用于获取数据，也是常见的。
+
+发现的风险：
+${description}
+
+对于每一类风险，请判断它可能是 "误报 (False Positive)" 还是 "真阳性/可疑 (True Positive / Suspicious)"，并解释原因。
+如果看起来是标准的插件行为（如保存配置、React 构建产物等），请将其标记为 "低风险 (Low Risk)"。
+请使用 Markdown 格式返回你的分析结果，并且必须使用**中文**回答。
+`;
+
+    try {
+        const baseUrl = (process.env.AI_API_BASE || 'https://api.openai.com/v1').replace(/\/+$/, '');
+        const url = `${baseUrl}/chat/completions`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.AI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: process.env.AI_MODEL || 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'system', content: '你是一位乐于助人的代码安全审计员。' },
+                    { role: 'user', content: prompt }
+                ]
+            })
+        }); if (!response.ok) {
+            console.error(`AI API Error: ${response.status} ${response.statusText}`);
+            return null;
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (e) {
+        console.error('AI Check failed:', e);
+        return null;
+    }
+}
+
 async function main() {
     console.log('Starting Security Scan...');
     ensureDir(TEMP_DIR);
@@ -237,6 +300,16 @@ async function main() {
                     medium.forEach(r => report += `- **${r.type}** in \`${r.file}:${r.line}\`: \`${r.code}\`\n`);
                 }
                 report += '\n';
+
+                // Call AI for analysis
+                if (process.env.AI_API_KEY) {
+                    console.log(`  Asking AI to analyze ${plugin.name} risks...`);
+                    const aiAnalysis = await checkWithAI(plugin.name, pluginRisks);
+                    if (aiAnalysis) {
+                        report += `\n### 🤖 AI Analysis for ${plugin.name}\n\n`;
+                        report += aiAnalysis + '\n\n';
+                    }
+                }
             }
 
         } catch (e) {
@@ -247,6 +320,11 @@ async function main() {
 
     // Output report to file for GitHub Actions to pick up
     fs.writeFileSync('security_report.md', report);
+
+    // Set output for GitHub Actions
+    if (process.env.GITHUB_OUTPUT) {
+        fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_high_risks=${hasHighRisks}\n`);
+    }
 
     // Write to GITHUB_STEP_SUMMARY if available
     if (process.env.GITHUB_STEP_SUMMARY) {
