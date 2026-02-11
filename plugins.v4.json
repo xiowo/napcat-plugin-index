@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updateTime": "2026-02-11T06:09:00Z",
+  "updateTime": "2026-02-11T06:28:43Z",
   "plugins": [
     {
       "id": "napcat-plugin-builtin",
@@ -413,6 +413,20 @@
       "downloadUrl": "https://github.com/ys7zTS/napcat-plugin-master/releases/download/v1.0.3/napcat-plugin-master.zip",
       "tags": [
         "工具"
+      ],
+      "minVersion": "4.14.0"
+    },
+    {
+      "id": "napcat-plugin-checkin",
+      "name": "签到插件",
+      "version": "1.0.0",
+      "description": "NapCat 精美签到插件 - 支持连续签到加成、积分统计",
+      "author": "MY-Final",
+      "homepage": "https://github.com/MY-Final/napcat-plugin-checkin",
+      "downloadUrl": "https://github.com/MY-Final/napcat-plugin-checkin/releases/download/v1.0.0/napcat-plugin-checkin.zip",
+      "tags": [
+        "工具",
+        "娱乐"
       ],
       "minVersion": "4.14.0"
     }
