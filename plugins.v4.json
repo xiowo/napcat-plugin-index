@@ -503,11 +503,11 @@
     {
       "id": "napcat-plugin-gscore-adapter",
       "name": "GScore 适配器",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "一个适用于NapCat的GScore适配器",
       "author": "MortalCat",
       "homepage": "https://github.com/xiowo/napcat-plugin-gscore-adapter",
-      "downloadUrl": "https://github.com/xiowo/napcat-plugin-gscore-adapter/releases/download/v1.0.1/napcat-plugin-gscore-adapter.zip",
+      "downloadUrl": "https://github.com/xiowo/napcat-plugin-gscore-adapter/releases/download/v1.0.2/napcat-plugin-gscore-adapter.zip",
       "tags": [
         "工具"
       ],
@@ -516,11 +516,11 @@
     {
       "id": "napcat-plugin-manborvc",
       "name": "曼波语音生成器",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "NapCat 插件 - 曼波语音生成器，通过在线API生成曼波语音，使用指令/曼波 {要说的内容}",
       "author": "LinmingXHL",
       "homepage": "https://github.com/LinmingXHL/napcat-plugin-manborvc",
-      "downloadUrl": "https://github.com/Linming-XHL/napcat-plugin-manborvc/releases/download/v1.0.2/napcat-plugin-manborvc.zip",
+      "downloadUrl": "https://github.com/Linming-XHL/napcat-plugin-manborvc/releases/download/v1.0.3/napcat-plugin-manborvc.zip",
       "tags": [
         "工具"
       ],
