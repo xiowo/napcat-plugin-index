@@ -98,8 +98,9 @@ NapCat 插件索引仓库
 3. 插件包内的 `package.json` 中的 `name` 必须符合命名规范（仅小写字母、数字、短横线，禁止中文/大写）
 4. `downloadUrl` 必须是可直接下载的 zip 文件链接，且在下载后可直接安装
 5. 提交流程推荐使用 [napcat-plugin-template](https://github.com/AQiaoYo/napcat-plugin-template) 模板开发，享受自动化测试和发布。
-6. 本仓库启用 AI 技术对插件代码进行安全审查，请确保代码清晰，避免过度混淆。
-7. `updateTime` 由本仓库 CI 在合并后自动更新，PR 中不要修改该字段以避免冲突。
+6. 更新插件时必须提升 `version`，同版本重复提交会被拒绝。
+7. 本仓库启用 AI 技术对插件代码进行安全审查，请确保代码清晰，避免过度混淆。
+8. `updateTime` 由本仓库 CI 在合并后自动更新，PR 中不要修改该字段以避免冲突。
 
 ### 插件规范要求
 

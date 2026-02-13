@@ -91,6 +91,7 @@ jobs:
                     '> - 插件 ID 必须符合 `napcat-plugin-xxx` 格式',
                     '> - 所有必填字段不能为空',
                     '> - downloadUrl 必须是可访问的 .zip 链接',
+                    '> - 更新插件时必须提升 version（同版本重复提交会被拒绝）',
                     '> - 版本号需符合 semver 格式',
                   ].join('\n'),
             ].join('\n');

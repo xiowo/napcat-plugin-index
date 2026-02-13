@@ -448,6 +448,10 @@ async function main() {
                     if (u.old.description !== u.new.description) changes.push('description 已更新');
                     logInfo(`更新 ${u.new.id}: ${changes.join(', ') || '其他字段变更'}`);
 
+                    if (u.old.version === u.new.version) {
+                        logError(u.new.id, `版本号未变化，更新插件必须提升版本号（当前 ${u.new.version}）`);
+                    }
+
                     // 如果版本变更或下载地址变更，进行深度校验
                     if (u.old.version !== u.new.version || u.old.downloadUrl !== u.new.downloadUrl) {
                         await validatePackageName(u.new);
