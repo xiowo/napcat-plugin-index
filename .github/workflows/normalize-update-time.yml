@@ -50,7 +50,26 @@ jobs:
               }
 
               if (!mergeBaseSha) {
-                console.log('merge_base_sha not found; skip.');
+                try {
+                  const { data: compare } = await github.rest.repos.compareCommits({
+                    owner,
+                    repo,
+                    base: pr.base.sha || pr.base.ref,
+                    head: `${pr.head.repo.owner.login}:${pr.head.ref}`,
+                  });
+                  mergeBaseSha = compare.merge_base_commit && compare.merge_base_commit.sha;
+                } catch (err) {
+                  console.log(`compareCommits failed: ${err.message}`);
+                }
+              }
+
+              if (!mergeBaseSha) {
+                console.log('merge_base_sha not found; fallback to base sha.');
+                mergeBaseSha = pr.base.sha || pr.base.ref;
+              }
+
+              if (!mergeBaseSha) {
+                console.log('base sha not found; skip.');
                 return;
               }
 
